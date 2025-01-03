@@ -14,6 +14,7 @@ public class ModelSimulationGUI extends JFrame {
     private Controller controller;
     private JTable resultsTable;
     private JLabel statusLabel;
+    private JComboBox<String> modelSelector; // Dropdown for model selection
     private String dataFilePath = null;
 
     // All columns that must be displayed in the table
@@ -48,6 +49,10 @@ public class ModelSimulationGUI extends JFrame {
         loadFileButton.addActionListener(new LoadFileAction());
         panel.add(loadFileButton);
 
+        // Dropdown to select the model
+        modelSelector = new JComboBox<>(new String[]{"Model1", "Model2"});
+        panel.add(modelSelector);
+
         JButton runModelButton = new JButton("Run Model");
         runModelButton.addActionListener(new RunModelAction());
         panel.add(runModelButton);
@@ -77,7 +82,6 @@ public class ModelSimulationGUI extends JFrame {
         return panel;
     }
 
-    // Action for "Load Data" button
     private class LoadFileAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -103,7 +107,6 @@ public class ModelSimulationGUI extends JFrame {
         }
     }
 
-    // Action for "Run Model" button
     private class RunModelAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
@@ -112,63 +115,52 @@ public class ModelSimulationGUI extends JFrame {
                 return;
             }
 
+            String selectedModel = (String) modelSelector.getSelectedItem();
             try {
-                controller.run(dataFilePath, "src/main/resources/results.json");
+                controller.runModel(dataFilePath, "src/main/resources/results.json", selectedModel);
                 Map<String, Object> results = controller.readJson("src/main/resources/results.json");
                 populateTable(results, false); // Do not show ZDEKS yet
-                statusLabel.setText("Status: Model executed successfully.");
+                statusLabel.setText("Status: " + selectedModel + " executed successfully.");
             } catch (Exception ex) {
-                statusLabel.setText("Status: Failed to run model.");
+                statusLabel.setText("Status: Failed to run " + selectedModel + ".");
                 ex.printStackTrace();
             }
         }
     }
 
-    // Action for "Execute Script" button
     private class ExecuteScriptAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
             try {
-                String script = "import os\n"
-                        + "import json\n"
-                        + "input_path = os.getenv('INPUT_PATH')\n"
-                        + "output_path = os.getenv('OUTPUT_PATH')\n"
-                        + "with open(input_path, 'r') as f:\n"
-                        + "    data = json.load(f)\n"
-                        + "PKB = data.get('PKB', [])\n"
-                        + "EKS = data.get('EKS', [])\n"
-                        + "ZDEKS = [e / p if p != 0 else 0 for e, p in zip(EKS, PKB)]\n"
-                        + "data['ZDEKS'] = ZDEKS\n"
-                        + "with open(output_path, 'w') as f:\n"
-                        + "    json.dump(data, f, indent=4)";
-                controller.runScript(script);
+                String notebookPath = "src/main/resources/script1.ipynb";
+                String inputPath = "src/main/resources/intermediate.json";
+                String outputPath = "src/main/resources/results.json";
 
-                Map<String, Object> results = controller.readJson("src/main/resources/results.json");
+                // Run the Jupyter Notebook using nbconvert
+                controller.runNotebook(notebookPath, inputPath, outputPath);
+
+                // Read the results after notebook execution
+                Map<String, Object> results = controller.readJson(outputPath);
+
+                // Populate the table and include ZDEKS
                 populateTable(results, true); // Show ZDEKS after execution
-                statusLabel.setText("Status: Script executed successfully.");
+                statusLabel.setText("Status: Notebook executed successfully.");
             } catch (Exception ex) {
-                statusLabel.setText("Status: Failed to execute script.");
+                statusLabel.setText("Status: Failed to execute notebook.");
                 ex.printStackTrace();
             }
         }
     }
 
-    /**
-     * Populates the table with all fields, optionally including ZDEKS.
-     *
-     * @param data       The JSON data as a Map.
-     * @param includeZdeks Whether to include the ZDEKS column.
-     */
     private void populateTable(Map<String, Object> data, boolean includeZdeks) {
         DefaultTableModel tableModel = new DefaultTableModel();
         for (String column : TABLE_COLUMNS) {
             if (!includeZdeks && column.equals("ZDEKS")) {
-                continue; // Skip ZDEKS if not requested
+                continue;
             }
             tableModel.addColumn(column);
         }
 
-        // Ensure all columns have data
         List<Double> years = (List<Double>) data.getOrDefault("LATA", Collections.emptyList());
         int rowCount = years.size();
 
@@ -176,11 +168,10 @@ public class ModelSimulationGUI extends JFrame {
             Object[] row = new Object[TABLE_COLUMNS.length];
             row[0] = years.get(i).intValue(); // Year column
 
-            // Populate each field dynamically
             for (int col = 1; col < TABLE_COLUMNS.length; col++) {
                 String columnName = TABLE_COLUMNS[col];
                 if (!includeZdeks && columnName.equals("ZDEKS")) {
-                    row[col] = null; // Skip ZDEKS if not available
+                    row[col] = null;
                     continue;
                 }
 

@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Model1 implements ModelBase{
+public class Model2 implements ModelBase {
     private int LL; // Number of years
 
     @Bind("twKI")
@@ -38,14 +38,16 @@ public class Model1 implements ModelBase{
     private double[] IMP;
 
     private double[] PKB;
+    private double[] NetExports; // New metric for Model2
 
-    public Model1(int years) {
+    public Model2(int years) {
         this.LL = years;
         initializeArrays();
     }
 
     private void initializeArrays() {
         PKB = new double[LL];
+        NetExports = new double[LL]; // Initialize Net Exports
     }
 
     public void setData(Map<String, Object> data) {
@@ -104,30 +106,34 @@ public class Model1 implements ModelBase{
     }
 
     public void run() {
-        PKB[0] = KI[0] + KS[0] + INW[0] + EKS[0] - IMP[0];
+        // Calculate PKB and Net Exports for Model2
+        for (int t = 0; t < LL; t++) {
+            if (t == 0) {
+                PKB[t] = KI[t] + KS[t] + INW[t] + EKS[t] - IMP[t];
+            } else {
+                KI[t] = twKI[t % twKI.length] * KI[t - 1];
+                KS[t] = twKS[t % twKS.length] * KS[t - 1];
+                INW[t] = twINW[t % twINW.length] * INW[t - 1];
+                EKS[t] = twEKS[t % twEKS.length] * EKS[t - 1];
+                IMP[t] = twIMP[t % twIMP.length] * IMP[t - 1];
+                PKB[t] = KI[t] + KS[t] + INW[t] + EKS[t] - IMP[t];
+            }
 
-        for (int t = 1; t < LL; t++) {
-            KI[t] = twKI[t % twKI.length] * KI[t - 1];
-            KS[t] = twKS[t % twKS.length] * KS[t - 1];
-            INW[t] = twINW[t % twINW.length] * INW[t - 1];
-            EKS[t] = twEKS[t % twEKS.length] * EKS[t - 1];
-            IMP[t] = twIMP[t % twIMP.length] * IMP[t - 1];
-            PKB[t] = KI[t] + KS[t] + INW[t] + EKS[t] - IMP[t];
+            // New calculation for Model2: Net Exports
+            NetExports[t] = EKS[t] - IMP[t];
         }
     }
 
     public Map<String, Object> getResults() {
         Map<String, Object> results = new HashMap<>();
 
-        // Instead of storing arrays like this:
-        // results.put("LATA", generateYears().toArray(new Integer[0]));
-        // store them as a List<Integer>:
+        // Generate year list
         List<Integer> years = generateYears();
         results.put("LATA", years);
 
-        // Instead of storing PKB, EKS as double[], store them as List<Double>:
+        // Add PKB and Net Exports
         results.put("PKB", Arrays.stream(PKB).boxed().collect(Collectors.toList()));
-        results.put("EKS", Arrays.stream(EKS).boxed().collect(Collectors.toList()));
+        results.put("NetExports", Arrays.stream(NetExports).boxed().collect(Collectors.toList()));
 
         return results;
     }

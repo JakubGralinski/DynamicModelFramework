@@ -2,18 +2,19 @@ package org.example;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import org.example.Model1;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class Controller {
     private final String scriptDir = "src/main/resources/"; // Directory for scripts
     private final String dataDir = "src/main/resources/";   // Directory for data
 
-    // Existing Methods
+    /**
+     * Reads JSON data from a file and returns it as a Map.
+     * @param filePath the path of the JSON file
+     * @return a Map representing the JSON data
+     */
     public Map<String, Object> readJson(String filePath) {
         try (FileReader reader = new FileReader(filePath)) {
             Gson gson = new Gson();
@@ -24,6 +25,11 @@ public class Controller {
         }
     }
 
+    /**
+     * Saves data to a JSON file.
+     * @param filePath the path to save the JSON file
+     * @param data the data to be saved
+     */
     public void saveJson(String filePath, Map<String, Object> data) {
         try (FileWriter writer = new FileWriter(filePath)) {
             Gson gson = new Gson();
@@ -33,6 +39,12 @@ public class Controller {
         }
     }
 
+    /**
+     * Executes a Jupyter notebook by calling nbconvert.
+     * @param notebookPath the path to the notebook
+     * @param inputPath the path to the input JSON file
+     * @param outputPath the path to the output JSON file
+     */
     public void runNotebook(String notebookPath, String inputPath, String outputPath) {
         try {
             // Ensure the input and output files exist or can be created
@@ -77,7 +89,13 @@ public class Controller {
         }
     }
 
-    public void run(String inputFile, String outputFile) {
+    /**
+     * Dynamically selects a model (Model1 or Model2) and executes it with the provided data.
+     * @param inputFile the path to the input JSON file
+     * @param outputFile the path to the output JSON file
+     * @param modelName the name of the model to use ("Model1" or "Model2")
+     */
+    public void runModel(String inputFile, String outputFile, String modelName) {
         // Step 1: Read the original input data
         Map<String, Object> inputData = readJson(inputFile);
         if (inputData == null) {
@@ -85,25 +103,34 @@ public class Controller {
             return;
         }
 
-        // Step 2: Execute the model
-        Model1 model = new Model1(((List<?>) inputData.get("LATA")).size());
+        // Step 2: Instantiate the chosen model dynamically
+        ModelBase model;
+        if ("Model1".equalsIgnoreCase(modelName)) {
+            model = new Model1(((List<?>) inputData.get("LATA")).size());
+        } else if ("Model2".equalsIgnoreCase(modelName)) {
+            model = new Model2(((List<?>) inputData.get("LATA")).size());
+        } else {
+            throw new IllegalArgumentException("Unknown model: " + modelName);
+        }
+
+        // Step 3: Execute the model
         model.setData(inputData);
         model.run();
 
-        // Step 3: Get intermediate results from the model
+        // Step 4: Get intermediate results from the model
         Map<String, Object> intermediateResults = model.getResults();
 
-        // Step 4: Merge intermediate results back into the original input data
+        // Step 5: Merge intermediate results back into the original input data
         inputData.putAll(intermediateResults);
 
-        // Step 5: Save merged data to an intermediate file
+        // Step 6: Save merged data to an intermediate file
         String intermediateFile = new File(dataDir + "intermediate.json").getAbsolutePath();
         saveJson(intermediateFile, inputData);
 
-        // Step 6: Run the notebook script
+        // Step 7: Run the notebook script
         runNotebook("src/main/resources/script1.ipynb", intermediateFile, outputFile);
 
-        // Step 7: Verify and ensure ZDEKS is added to the final JSON
+        // Step 8: Verify and ensure ZDEKS is added to the final JSON
         Map<String, Object> finalResults = readJson(outputFile);
         if (finalResults != null) {
             inputData.putAll(finalResults); // Add any fields created in the notebook
@@ -113,7 +140,10 @@ public class Controller {
         System.out.println("Results saved to " + outputFile);
     }
 
-    // New Methods
+    /**
+     * Reads data from a file and validates its structure.
+     * @param fname the path to the data file
+     */
     public void readDataFrom(String fname) {
         Map<String, Object> data = readJson(fname);
         if (data == null) {
@@ -122,15 +152,10 @@ public class Controller {
         System.out.println("Data loaded successfully from: " + fname);
     }
 
-    public void runScriptFromFile(String fname) {
-        try {
-            String script = new String(Files.readAllBytes(new File(fname).toPath()));
-            runScript(script);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+    /**
+     * Runs a Python script provided as a string.
+     * @param script the Python script to execute
+     */
     public void runScript(String script) {
         try {
             ProcessBuilder pb = new ProcessBuilder("python3", "-c", script);
@@ -148,23 +173,5 @@ public class Controller {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    public String getResultsAsTsv(Map<String, Object> results) {
-        List<Integer> years = (List<Integer>) results.get("LATA");
-        double[] pkb = (double[]) results.get("PKB");
-        double[] eks = (double[]) results.get("EKS");
-
-        StringBuilder tsv = new StringBuilder("Year\tPKB\tEKS\n");
-        for (int i = 0; i < years.size(); i++) {
-            tsv.append(years.get(i))
-                    .append("\t")
-                    .append(pkb[i])
-                    .append("\t")
-                    .append(eks[i])
-                    .append("\n");
-        }
-
-        return tsv.toString();
     }
 }
