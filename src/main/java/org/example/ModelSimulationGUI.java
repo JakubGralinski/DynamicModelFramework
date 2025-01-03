@@ -1,29 +1,32 @@
 package org.example;
 
-import org.example.Controller;
-
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 public class ModelSimulationGUI extends JFrame {
     private Controller controller;
-    private JTextArea scriptArea;
     private JTable resultsTable;
     private JLabel statusLabel;
-
-    // Keep track of which file user chose:
     private String dataFilePath = null;
+
+    // All columns that must be displayed in the table
+    private static final String[] TABLE_COLUMNS = {
+            "Year", "twKI", "twKS", "twINW", "twEKS", "twIMP",
+            "KI", "KS", "INW", "EKS", "IMP", "PKB", "ZDEKS"
+    };
 
     public ModelSimulationGUI() {
         controller = new Controller();
 
         setTitle("Model Simulation GUI");
-        setSize(800, 600);
+        setSize(1200, 800);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -59,13 +62,8 @@ public class ModelSimulationGUI extends JFrame {
     private JPanel createCenterPanel() {
         JPanel panel = new JPanel(new BorderLayout());
 
-        // Script input area
-        scriptArea = new JTextArea(10, 50);
-        JScrollPane scriptScrollPane = new JScrollPane(scriptArea);
-        panel.add(scriptScrollPane, BorderLayout.NORTH);
-
-        // Results table
-        resultsTable = new JTable(new DefaultTableModel(new Object[]{"Year", "PKB", "EKS"}, 0));
+        // Results table with predefined columns
+        resultsTable = new JTable(new DefaultTableModel(TABLE_COLUMNS, 0));
         JScrollPane tableScrollPane = new JScrollPane(resultsTable);
         panel.add(tableScrollPane, BorderLayout.CENTER);
 
@@ -88,12 +86,15 @@ public class ModelSimulationGUI extends JFrame {
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
-                dataFilePath = selectedFile.getAbsolutePath();  // Store path here!
+                dataFilePath = selectedFile.getAbsolutePath();
 
                 try {
-                    // Optionally read or validate the data
                     controller.readDataFrom(dataFilePath);
                     statusLabel.setText("Status: Data loaded from " + dataFilePath);
+
+                    // Load the initial data into the table
+                    Map<String, Object> data = controller.readJson(dataFilePath);
+                    populateTable(data, false);
                 } catch (Exception ex) {
                     statusLabel.setText("Status: Failed to load data.");
                     ex.printStackTrace();
@@ -106,44 +107,16 @@ public class ModelSimulationGUI extends JFrame {
     private class RunModelAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            // Use the file path you captured earlier:
             if (dataFilePath == null || dataFilePath.isEmpty()) {
                 statusLabel.setText("Status: No file selected!");
                 return;
             }
 
             try {
-                // Pass the chosen file to your model.
-                // In your original code, you used something like:
-                // controller.run("src/main/resources/intermediate.json", "src/main/resources/results.json");
-                // but we want the *actual* file chosen by user (dataFilePath):
                 controller.run(dataFilePath, "src/main/resources/results.json");
-
-                // Now read the results from results.json and populate the table:
                 Map<String, Object> results = controller.readJson("src/main/resources/results.json");
-
-                DefaultTableModel tableModel = (DefaultTableModel) resultsTable.getModel();
-                tableModel.setRowCount(0); // Clear table
-
-                // Convert objects from Map back to Lists
-                // (Adjust types or keys to whatever your JSON actually has)
-                java.util.List<Double> yearsList = (java.util.List<Double>) results.get("LATA");
-                java.util.List<Double> pkbList   = (java.util.List<Double>) results.get("PKB");
-                java.util.List<Double> eksList   = (java.util.List<Double>) results.get("EKS");
-
-                // If you need int years:
-                java.util.List<Integer> years = yearsList.stream()
-                        .map(Double::intValue)
-                        .toList();
-
-                double[] pkb = pkbList.stream().mapToDouble(Double::doubleValue).toArray();
-                double[] eks = eksList.stream().mapToDouble(Double::doubleValue).toArray();
-
-                for (int i = 0; i < years.size(); i++) {
-                    tableModel.addRow(new Object[]{years.get(i), pkb[i], eks[i]});
-                }
-
-                statusLabel.setText("Status: Model run successfully using " + dataFilePath);
+                populateTable(results, false); // Do not show ZDEKS yet
+                statusLabel.setText("Status: Model executed successfully.");
             } catch (Exception ex) {
                 statusLabel.setText("Status: Failed to run model.");
                 ex.printStackTrace();
@@ -155,15 +128,69 @@ public class ModelSimulationGUI extends JFrame {
     private class ExecuteScriptAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            String script = scriptArea.getText();
             try {
+                String script = "import os\n"
+                        + "import json\n"
+                        + "input_path = os.getenv('INPUT_PATH')\n"
+                        + "output_path = os.getenv('OUTPUT_PATH')\n"
+                        + "with open(input_path, 'r') as f:\n"
+                        + "    data = json.load(f)\n"
+                        + "PKB = data.get('PKB', [])\n"
+                        + "EKS = data.get('EKS', [])\n"
+                        + "ZDEKS = [e / p if p != 0 else 0 for e, p in zip(EKS, PKB)]\n"
+                        + "data['ZDEKS'] = ZDEKS\n"
+                        + "with open(output_path, 'w') as f:\n"
+                        + "    json.dump(data, f, indent=4)";
                 controller.runScript(script);
+
+                Map<String, Object> results = controller.readJson("src/main/resources/results.json");
+                populateTable(results, true); // Show ZDEKS after execution
                 statusLabel.setText("Status: Script executed successfully.");
             } catch (Exception ex) {
                 statusLabel.setText("Status: Failed to execute script.");
                 ex.printStackTrace();
             }
         }
+    }
+
+    /**
+     * Populates the table with all fields, optionally including ZDEKS.
+     *
+     * @param data       The JSON data as a Map.
+     * @param includeZdeks Whether to include the ZDEKS column.
+     */
+    private void populateTable(Map<String, Object> data, boolean includeZdeks) {
+        DefaultTableModel tableModel = new DefaultTableModel();
+        for (String column : TABLE_COLUMNS) {
+            if (!includeZdeks && column.equals("ZDEKS")) {
+                continue; // Skip ZDEKS if not requested
+            }
+            tableModel.addColumn(column);
+        }
+
+        // Ensure all columns have data
+        List<Double> years = (List<Double>) data.getOrDefault("LATA", Collections.emptyList());
+        int rowCount = years.size();
+
+        for (int i = 0; i < rowCount; i++) {
+            Object[] row = new Object[TABLE_COLUMNS.length];
+            row[0] = years.get(i).intValue(); // Year column
+
+            // Populate each field dynamically
+            for (int col = 1; col < TABLE_COLUMNS.length; col++) {
+                String columnName = TABLE_COLUMNS[col];
+                if (!includeZdeks && columnName.equals("ZDEKS")) {
+                    row[col] = null; // Skip ZDEKS if not available
+                    continue;
+                }
+
+                List<?> values = (List<?>) data.getOrDefault(columnName, Collections.emptyList());
+                row[col] = (i < values.size()) ? values.get(i) : null;
+            }
+            tableModel.addRow(row);
+        }
+
+        resultsTable.setModel(tableModel);
     }
 
     public static void main(String[] args) {
