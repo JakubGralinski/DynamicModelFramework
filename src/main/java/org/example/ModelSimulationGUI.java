@@ -20,7 +20,7 @@ public class ModelSimulationGUI extends JFrame {
     // All columns that must be displayed in the table
     private static final String[] TABLE_COLUMNS = {
             "Year", "twKI", "twKS", "twINW", "twEKS", "twIMP",
-            "KI", "KS", "INW", "EKS", "IMP", "PKB", "ZDEKS"
+            "KI", "KS", "INW", "EKS", "IMP", "PKB", "NET_EXPORTS", "ZDEKS"
     };
 
     public ModelSimulationGUI() {
@@ -142,8 +142,8 @@ public class ModelSimulationGUI extends JFrame {
                 // Read the results after notebook execution
                 Map<String, Object> results = controller.readJson(outputPath);
 
-                // Populate the table and include ZDEKS
-                populateTable(results, true); // Show ZDEKS after execution
+                // Populate the table and include ZDEKS values
+                populateTable(results, true); // Now include ZDEKS values
                 statusLabel.setText("Status: Notebook executed successfully.");
             } catch (Exception ex) {
                 statusLabel.setText("Status: Failed to execute notebook.");
@@ -154,10 +154,9 @@ public class ModelSimulationGUI extends JFrame {
 
     private void populateTable(Map<String, Object> data, boolean includeZdeks) {
         DefaultTableModel tableModel = new DefaultTableModel();
+
+        // Always include all columns, including "ZDEKS"
         for (String column : TABLE_COLUMNS) {
-            if (!includeZdeks && column.equals("ZDEKS")) {
-                continue;
-            }
             tableModel.addColumn(column);
         }
 
@@ -170,18 +169,24 @@ public class ModelSimulationGUI extends JFrame {
 
             for (int col = 1; col < TABLE_COLUMNS.length; col++) {
                 String columnName = TABLE_COLUMNS[col];
-                if (!includeZdeks && columnName.equals("ZDEKS")) {
-                    row[col] = null;
+
+                // Fill ZDEKS column with empty values unless includeZdeks is true
+                if (columnName.equals("ZDEKS")) {
+                    row[col] = includeZdeks ? getValueFromData(data, columnName, i) : null;
                     continue;
                 }
 
-                List<?> values = (List<?>) data.getOrDefault(columnName, Collections.emptyList());
-                row[col] = (i < values.size()) ? values.get(i) : null;
+                row[col] = getValueFromData(data, columnName, i);
             }
             tableModel.addRow(row);
         }
 
         resultsTable.setModel(tableModel);
+    }
+
+    private Object getValueFromData(Map<String, Object> data, String key, int index) {
+        List<?> values = (List<?>) data.getOrDefault(key, Collections.emptyList());
+        return (index < values.size()) ? values.get(index) : null;
     }
 
     public static void main(String[] args) {

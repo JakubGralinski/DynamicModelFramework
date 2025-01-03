@@ -133,7 +133,7 @@ public class Model2 implements ModelBase {
 
         // Add PKB and Net Exports
         results.put("PKB", Arrays.stream(PKB).boxed().collect(Collectors.toList()));
-        results.put("NetExports", Arrays.stream(NetExports).boxed().collect(Collectors.toList()));
+        results.put("NET_EXPORTS", Arrays.stream(NetExports).boxed().collect(Collectors.toList()));
 
         return results;
     }
