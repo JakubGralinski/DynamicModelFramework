@@ -131,23 +131,31 @@ public class ModelSimulationGUI extends JFrame {
     private class ExecuteScriptAction implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            try {
-                String notebookPath = "src/main/resources/script1.ipynb";
-                String inputPath = "src/main/resources/intermediate.json";
-                String outputPath = "src/main/resources/results.json";
+            JFileChooser fileChooser = new JFileChooser();
+            fileChooser.setCurrentDirectory(new File("src/main/resources"));
+            int returnValue = fileChooser.showOpenDialog(ModelSimulationGUI.this);
 
-                // Run the Jupyter Notebook using nbconvert
-                controller.runNotebook(notebookPath, inputPath, outputPath);
+            if (returnValue == JFileChooser.APPROVE_OPTION) {
+                File selectedFile = fileChooser.getSelectedFile();
+                dataFilePath = selectedFile.getAbsolutePath();
+                try {
+                    String notebookPath = dataFilePath;
+                    String inputPath = "src/main/resources/intermediate.json";
+                    String outputPath = "src/main/resources/results.json";
 
-                // Read the results after notebook execution
-                Map<String, Object> results = controller.readJson(outputPath);
+                    // Run the Jupyter Notebook using nbconvert
+                    controller.runNotebook(notebookPath, inputPath, outputPath);
 
-                // Populate the table and include ZDEKS values
-                populateTable(results, true); // Now include ZDEKS values
-                statusLabel.setText("Status: Notebook executed successfully.");
-            } catch (Exception ex) {
-                statusLabel.setText("Status: Failed to execute notebook.");
-                ex.printStackTrace();
+                    // Read the results after notebook execution
+                    Map<String, Object> results = controller.readJson(outputPath);
+
+                    // Populate the table and include ZDEKS values
+                    populateTable(results, true); // Now include ZDEKS values
+                    statusLabel.setText("Status: Notebook executed successfully.");
+                } catch (Exception ex) {
+                    statusLabel.setText("Status: Failed to execute notebook.");
+                    ex.printStackTrace();
+                }
             }
         }
     }

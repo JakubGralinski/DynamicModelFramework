@@ -6,6 +6,9 @@
   <component name="ChangeListManager">
     <list default="true" id="27979a25-1280-4824-bf88-fa13893c1b4f" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ModelSimulationGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ModelSimulationGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/intermediate.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/intermediate.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/output.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/output.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/results.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/results.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
