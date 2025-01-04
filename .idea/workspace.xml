@@ -5,23 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="27979a25-1280-4824-bf88-fa13893c1b4f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/ad_hoc_script_seting_zeros.ipynb" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/models/Model3.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Model1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Model1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Model2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Model2.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ModelBase.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/ModelBase.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ModelSimulationGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ModelFrameworkGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/ad_hoc_script.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/ad_hoc_script.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/data.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ModelFrameworkGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ModelFrameworkGUI.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/intermediate.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/intermediate.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/large_indices_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/large_indices_plot.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/output.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/output.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/results.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/results.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/script1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/script1.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/ControllerTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/org/example/Model1Test.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/results.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/results.tsv" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/zdeks_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/zdeks_plot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/testLargeDataset.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/resources/testMissingFields.json" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,8 +28,8 @@
       <list>
         <option value="AnnotationType" />
         <option value="Interface" />
-        <option value="Class" />
         <option value="Jupyter Notebook" />
+        <option value="Class" />
       </list>
     </option>
   </component>

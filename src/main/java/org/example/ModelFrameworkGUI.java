@@ -21,7 +21,7 @@ public class ModelFrameworkGUI extends JFrame {
     // All cols
     private static final String[] TABLE_COLUMNS = {
             "Year", "twKI", "twKS", "twINW", "twEKS", "twIMP",
-            "KI", "KS", "INW", "EKS", "IMP", "PKB", "NET_EXPORTS", "ZDEKS"
+            "KI", "KS", "INW", "EKS", "IMP", "PKB", "NET_EXPORTS", "SHOCK_FACTOR", "ZDEKS"
     };
 
     public ModelFrameworkGUI() {
@@ -51,7 +51,7 @@ public class ModelFrameworkGUI extends JFrame {
         panel.add(loadFileButton);
 
         // Dropdown to select the model
-        modelSelector = new JComboBox<>(new String[]{"Model1", "Model2"});
+        modelSelector = new JComboBox<>(new String[]{"Model1", "Model2", "Model3"});
         panel.add(modelSelector);
 
         JButton runModelButton = new JButton("Run Model");
@@ -157,7 +157,7 @@ public class ModelFrameworkGUI extends JFrame {
                     // Run the Jupyter Notebook using nbconvert
                     controller.runNotebook(notebookPath, inputPath, outputPath);
 
-                    // Read the results after notebook execution
+                    // Results after notebook execution
                     Map<String, Object> results = controller.readJson(outputPath);
 
                     // set the table

@@ -2,8 +2,7 @@ package org.example;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import models.Model1;
-import models.Model2;
+import models.*;
 import models.ModelBase;
 
 import java.io.*;
@@ -88,6 +87,8 @@ public class Controller {
             model = new Model1(((List<?>) inputData.get("LATA")).size());
         } else if ("Model2".equalsIgnoreCase(modelName)) {
             model = new Model2(((List<?>) inputData.get("LATA")).size());
+        } else if ("Model3".equalsIgnoreCase(modelName)) {
+            model = new Model3(((List<?>) inputData.get("LATA")).size());
         } else {
             throw new IllegalArgumentException("Unknown model: " + modelName);
         }
