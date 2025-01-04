@@ -1,11 +1,13 @@
-package org.example;
+package models;
+
+import org.example.Bind;
 
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Model2 implements ModelBase {
-    private int LL; // Number of years
+    private int LL; // # of years
 
     @Bind("twKI")
     private double[] twKI;
@@ -39,10 +41,9 @@ public class Model2 implements ModelBase {
 
     private double[] PKB; // GDP values
     private double[] NetExports; // Net Exports (calculated values)
-    private List<Integer> lata; // Years from the input JSON
+    private List<Integer> lata;
 
     public Model2(int lata) {
-        // Constructor with no predefined years
     }
 
     private void initializeArrays() {
@@ -57,7 +58,7 @@ public class Model2 implements ModelBase {
 
         System.out.println("Data received in setData: " + data);
 
-        // Ensure LATA field is present and valid
+        // Ensure LATA field is present
         List<Double> lataDoubles = (List<Double>) data.get("LATA");
         if (lataDoubles == null || lataDoubles.isEmpty()) {
             throw new IllegalArgumentException("The 'LATA' field is missing or empty in the input data.");
@@ -122,7 +123,7 @@ public class Model2 implements ModelBase {
                 PKB[t] = KI[t] + KS[t] + INW[t] + EKS[t] - IMP[t];
             }
 
-            // Calculate Net Exports
+            // new index net exports calc
             NetExports[t] = EKS[t] - IMP[t];
         }
     }

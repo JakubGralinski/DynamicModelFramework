@@ -10,24 +10,24 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class ModelSimulationGUI extends JFrame {
+public class ModelFrameworkGUI extends JFrame {
     private Controller controller;
     private JTable resultsTable;
     private JLabel statusLabel;
-    private JComboBox<String> modelSelector; // Dropdown for model selection
+    private JComboBox<String> modelSelector;
     private String dataFilePath = null;
     private JPanel plotPanel;
 
-    // All columns that must be displayed in the table
+    // All cols
     private static final String[] TABLE_COLUMNS = {
             "Year", "twKI", "twKS", "twINW", "twEKS", "twIMP",
             "KI", "KS", "INW", "EKS", "IMP", "PKB", "NET_EXPORTS", "ZDEKS"
     };
 
-    public ModelSimulationGUI() {
+    public ModelFrameworkGUI() {
         controller = new Controller();
 
-        setTitle("Model Simulation GUI");
+        setTitle("Model Framework GUI");
         setSize(1600, 1200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
@@ -79,7 +79,7 @@ public class ModelSimulationGUI extends JFrame {
 
         // Plot panel
         plotPanel = new JPanel();
-        plotPanel.setLayout(new GridLayout(1, 3, 10, 10)); // Display 3 plots side by side
+        plotPanel.setLayout(new GridLayout(1, 3, 10, 10)); // Displays 3 plots side by side
         panel.add(plotPanel);
 
         return panel;
@@ -96,7 +96,7 @@ public class ModelSimulationGUI extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
-            int returnValue = fileChooser.showOpenDialog(ModelSimulationGUI.this);
+            int returnValue = fileChooser.showOpenDialog(ModelFrameworkGUI.this);
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
@@ -108,7 +108,7 @@ public class ModelSimulationGUI extends JFrame {
 
                     // Load the initial data into the table
                     Map<String, Object> data = controller.readJson(dataFilePath);
-                    populateTable(data, false);
+                    setTable(data, false);
                 } catch (Exception ex) {
                     statusLabel.setText("Status: Failed to load data.");
                     ex.printStackTrace();
@@ -129,7 +129,8 @@ public class ModelSimulationGUI extends JFrame {
             try {
                 controller.runModel(dataFilePath, "src/main/resources/results.json", selectedModel);
                 Map<String, Object> results = controller.readJson("src/main/resources/results.json");
-                populateTable(results, false); // Do not show ZDEKS yet
+                setTable(results, false); // Do not show ZDEKS yet
+                controller.getResultsAsTsv(results, "src/main/resources/results.tsv");
                 statusLabel.setText("Status: " + selectedModel + " executed successfully.");
             } catch (Exception ex) {
                 statusLabel.setText("Status: Failed to run " + selectedModel + ".");
@@ -143,7 +144,7 @@ public class ModelSimulationGUI extends JFrame {
         public void actionPerformed(ActionEvent e) {
             JFileChooser fileChooser = new JFileChooser();
             fileChooser.setCurrentDirectory(new File("src/main/resources"));
-            int returnValue = fileChooser.showOpenDialog(ModelSimulationGUI.this);
+            int returnValue = fileChooser.showOpenDialog(ModelFrameworkGUI.this);
 
             if (returnValue == JFileChooser.APPROVE_OPTION) {
                 File selectedFile = fileChooser.getSelectedFile();
@@ -159,10 +160,11 @@ public class ModelSimulationGUI extends JFrame {
                     // Read the results after notebook execution
                     Map<String, Object> results = controller.readJson(outputPath);
 
-                    // Populate the table
-                    populateTable(results, true);
+                    // set the table
+                    setTable(results, true);
 
-                    // Load and display plots
+                    controller.getResultsAsTsv(results, "src/main/resources/results.tsv");
+
                     loadPlots();
 
                     statusLabel.setText("Status: Notebook executed successfully.");
@@ -174,7 +176,7 @@ public class ModelSimulationGUI extends JFrame {
         }
     }
 
-    private void populateTable(Map<String, Object> data, boolean includeZdeks) {
+    private void setTable(Map<String, Object> data, boolean includeZdeks) {
         DefaultTableModel tableModel = new DefaultTableModel();
 
         // Always include all columns, including "ZDEKS"
@@ -220,7 +222,7 @@ public class ModelSimulationGUI extends JFrame {
 
             JScrollPane scrollPane = new JScrollPane(scriptArea);
             int result = JOptionPane.showConfirmDialog(
-                    ModelSimulationGUI.this,
+                    ModelFrameworkGUI.this,
                     scrollPane,
                     "Enter Your Ad-hoc Script",
                     JOptionPane.OK_CANCEL_OPTION,
@@ -230,20 +232,19 @@ public class ModelSimulationGUI extends JFrame {
             if (result == JOptionPane.OK_OPTION) {
                 String script = scriptArea.getText();
                 if (script.isEmpty()) {
-                    JOptionPane.showMessageDialog(ModelSimulationGUI.this, "Script cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(ModelFrameworkGUI.this, "Script cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
                     return;
                 }
 
                 try {
-                    // Run the script
                     controller.runScript(script);
 
                     // Fetch results from results.json
                     String resultsFilePath = "src/main/resources/results.json";
                     Map<String, Object> updatedResults = controller.getResultsFromFile(resultsFilePath);
 
-                    // Populate the table with updated results
-                    populateTable(updatedResults, true);
+                    // set the table with updated results
+                    setTable(updatedResults, true);
 
                     // Do not load plots when executing an ad-hoc script
                     plotPanel.removeAll();
@@ -254,7 +255,7 @@ public class ModelSimulationGUI extends JFrame {
                 } catch (Exception ex) {
                     statusLabel.setText("Status: Failed to execute ad-hoc script.");
                     ex.printStackTrace();
-                    JOptionPane.showMessageDialog(ModelSimulationGUI.this, "Error executing script:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(ModelFrameworkGUI.this, "Error executing script:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         }
@@ -263,7 +264,7 @@ public class ModelSimulationGUI extends JFrame {
     private void loadPlots() {
         plotPanel.removeAll(); // Clear any existing plots
 
-        // Paths to plot images
+        // plot imgs paths
         String[] plotPaths = {
                 "src/main/resources/large_indices_plot.png",
                 "src/main/resources/small_indices_plot.png",
@@ -277,8 +278,8 @@ public class ModelSimulationGUI extends JFrame {
 
                 // Scale the image to fit the panel size
                 Image scaledImage = icon.getImage().getScaledInstance(
-                        plotPanel.getWidth() / plotPaths.length,  // Divide the width by the number of plots
-                        plotPanel.getHeight(),                   // Use the full height of the panel
+                        plotPanel.getWidth() / plotPaths.length,
+                        plotPanel.getHeight(),
                         Image.SCALE_SMOOTH
                 );
 
@@ -298,6 +299,6 @@ public class ModelSimulationGUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(ModelSimulationGUI::new);
+        SwingUtilities.invokeLater(ModelFrameworkGUI::new);
     }
 }

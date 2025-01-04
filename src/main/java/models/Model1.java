@@ -1,11 +1,13 @@
-package org.example;
+package models;
+
+import org.example.Bind;
 
 import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class Model1 implements ModelBase {
-    private int LL; // Number of years
+    private int LL; // # of years
 
     @Bind("twKI")
     private double[] twKI;
@@ -42,7 +44,7 @@ public class Model1 implements ModelBase {
     private List<Integer> lata; // Years from the input JSON
 
     public Model1(int lata) {
-        // Constructor for initialization without predefined years
+        // Constructor with no predef years
     }
 
     public void setData(Map<String, Object> data) {
@@ -52,7 +54,7 @@ public class Model1 implements ModelBase {
 
         System.out.println("Data received in setData: " + data);
 
-        // Ensure LATA field is present and valid
+        // Ensure LATA field is present
         List<Double> lataDoubles = (List<Double>) data.get("LATA");
         if (lataDoubles == null || lataDoubles.isEmpty()) {
             throw new IllegalArgumentException("The 'LATA' field is missing or empty in the input data.");
@@ -75,7 +77,7 @@ public class Model1 implements ModelBase {
                 if (initialValues.length == 0) {
                     System.out.println("Warning: Field '" + key + "' is empty. Using default values.");
                     initialValues = new double[LL];
-                    Arrays.fill(initialValues, 1.0); // Default value
+                    Arrays.fill(initialValues, 1.0); // def value
                 }
 
                 try {
@@ -109,10 +111,10 @@ public class Model1 implements ModelBase {
     }
 
     public void run() {
-        // Initial calculation for the first year
+        // initial calculation for the first year
         PKB[0] = KI[0] + KS[0] + INW[0] + EKS[0] - IMP[0];
 
-        // Loop through subsequent years
+        // loop through years
         for (int t = 1; t < LL; t++) {
             KI[t] = twKI[t % twKI.length] * KI[t - 1];
             KS[t] = twKS[t % twKS.length] * KS[t - 1];

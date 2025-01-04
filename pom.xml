@@ -34,7 +34,7 @@
             <version>1.4.11</version>
         </dependency>
 
-        <!-- JUnit for Testing -->
+        <!-- JUnit -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
