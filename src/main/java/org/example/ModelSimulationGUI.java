@@ -16,6 +16,7 @@ public class ModelSimulationGUI extends JFrame {
     private JLabel statusLabel;
     private JComboBox<String> modelSelector; // Dropdown for model selection
     private String dataFilePath = null;
+    private JPanel plotPanel;
 
     // All columns that must be displayed in the table
     private static final String[] TABLE_COLUMNS = {
@@ -27,7 +28,7 @@ public class ModelSimulationGUI extends JFrame {
         controller = new Controller();
 
         setTitle("Model Simulation GUI");
-        setSize(1200, 800);
+        setSize(1600, 1200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
@@ -69,12 +70,17 @@ public class ModelSimulationGUI extends JFrame {
     }
 
     private JPanel createCenterPanel() {
-        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panel = new JPanel(new GridLayout(2, 1));
 
-        // Results table with predefined columns
+        // Results table
         resultsTable = new JTable(new DefaultTableModel(TABLE_COLUMNS, 0));
         JScrollPane tableScrollPane = new JScrollPane(resultsTable);
-        panel.add(tableScrollPane, BorderLayout.CENTER);
+        panel.add(tableScrollPane);
+
+        // Plot panel
+        plotPanel = new JPanel();
+        plotPanel.setLayout(new GridLayout(1, 3, 10, 10)); // Display 3 plots side by side
+        panel.add(plotPanel);
 
         return panel;
     }
@@ -153,8 +159,12 @@ public class ModelSimulationGUI extends JFrame {
                     // Read the results after notebook execution
                     Map<String, Object> results = controller.readJson(outputPath);
 
-                    // Populate the table and include ZDEKS values
-                    populateTable(results, true); // Now include ZDEKS values
+                    // Populate the table
+                    populateTable(results, true);
+
+                    // Load and display plots
+                    loadPlots();
+
                     statusLabel.setText("Status: Notebook executed successfully.");
                 } catch (Exception ex) {
                     statusLabel.setText("Status: Failed to execute notebook.");
@@ -235,6 +245,11 @@ public class ModelSimulationGUI extends JFrame {
                     // Populate the table with updated results
                     populateTable(updatedResults, true);
 
+                    // Do not load plots when executing an ad-hoc script
+                    plotPanel.removeAll();
+                    plotPanel.revalidate();
+                    plotPanel.repaint();
+
                     statusLabel.setText("Status: Ad-hoc script executed successfully.");
                 } catch (Exception ex) {
                     statusLabel.setText("Status: Failed to execute ad-hoc script.");
@@ -243,6 +258,43 @@ public class ModelSimulationGUI extends JFrame {
                 }
             }
         }
+    }
+
+    private void loadPlots() {
+        plotPanel.removeAll(); // Clear any existing plots
+
+        // Paths to plot images
+        String[] plotPaths = {
+                "src/main/resources/large_indices_plot.png",
+                "src/main/resources/small_indices_plot.png",
+                "src/main/resources/zdeks_plot.png"
+        };
+
+        for (String path : plotPaths) {
+            File file = new File(path);
+            if (file.exists()) {
+                ImageIcon icon = new ImageIcon(path);
+
+                // Scale the image to fit the panel size
+                Image scaledImage = icon.getImage().getScaledInstance(
+                        plotPanel.getWidth() / plotPaths.length,  // Divide the width by the number of plots
+                        plotPanel.getHeight(),                   // Use the full height of the panel
+                        Image.SCALE_SMOOTH
+                );
+
+                // Set the scaled image in the label
+                JLabel label = new JLabel(new ImageIcon(scaledImage));
+                label.setHorizontalAlignment(SwingConstants.CENTER);
+                plotPanel.add(label);
+            } else {
+                JLabel errorLabel = new JLabel("Plot not found: " + path);
+                errorLabel.setHorizontalAlignment(SwingConstants.CENTER);
+                plotPanel.add(errorLabel);
+            }
+        }
+
+        plotPanel.revalidate();
+        plotPanel.repaint();
     }
 
     public static void main(String[] args) {

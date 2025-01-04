@@ -5,19 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="27979a25-1280-4824-bf88-fa13893c1b4f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/resources/ad_hoc_script.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Model1.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Model1.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Model2.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Model2.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ModelSimulationGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ModelSimulationGUI.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/intermediate.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/intermediate.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/large_indices_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/large_indices_plot.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/output.ipynb" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/all_indices_plot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/large_indices_plot.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/large_indices_plot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/large_indices_vibrant.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/output.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/output.ipynb" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/results.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/results.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/script1.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/script1.ipynb" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/small_indices_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/small_indices_plot.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/zdeks_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/zdeks_plot.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/small_indices_plot.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/small_indices_plot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/small_indices_vibrant.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/zdeks_plot.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/zdeks_plot.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -171,7 +171,7 @@
       <workItem from="1734891586830" duration="3935000" />
       <workItem from="1735392336835" duration="5429000" />
       <workItem from="1735584347700" duration="1670000" />
-      <workItem from="1735948388810" duration="3992000" />
+      <workItem from="1735948388810" duration="5706000" />
     </task>
     <servers />
   </component>
