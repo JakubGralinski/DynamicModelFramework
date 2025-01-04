@@ -61,6 +61,10 @@ public class ModelSimulationGUI extends JFrame {
         executeScriptButton.addActionListener(new ExecuteScriptAction());
         panel.add(executeScriptButton);
 
+        JButton adhocScriptButton = new JButton("Create and Run Ad-hoc Script");
+        adhocScriptButton.addActionListener(new CreateAdhocScriptAction());
+        panel.add(adhocScriptButton);
+
         return panel;
     }
 
@@ -195,6 +199,50 @@ public class ModelSimulationGUI extends JFrame {
     private Object getValueFromData(Map<String, Object> data, String key, int index) {
         List<?> values = (List<?>) data.getOrDefault(key, Collections.emptyList());
         return (index < values.size()) ? values.get(index) : null;
+    }
+
+    private class CreateAdhocScriptAction implements ActionListener {
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            JTextArea scriptArea = new JTextArea(20, 50);
+            scriptArea.setLineWrap(true);
+            scriptArea.setWrapStyleWord(true);
+
+            JScrollPane scrollPane = new JScrollPane(scriptArea);
+            int result = JOptionPane.showConfirmDialog(
+                    ModelSimulationGUI.this,
+                    scrollPane,
+                    "Enter Your Ad-hoc Script",
+                    JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.PLAIN_MESSAGE
+            );
+
+            if (result == JOptionPane.OK_OPTION) {
+                String script = scriptArea.getText();
+                if (script.isEmpty()) {
+                    JOptionPane.showMessageDialog(ModelSimulationGUI.this, "Script cannot be empty!", "Error", JOptionPane.ERROR_MESSAGE);
+                    return;
+                }
+
+                try {
+                    // Run the script
+                    controller.runScript(script);
+
+                    // Fetch results from results.json
+                    String resultsFilePath = "src/main/resources/results.json";
+                    Map<String, Object> updatedResults = controller.getResultsFromFile(resultsFilePath);
+
+                    // Populate the table with updated results
+                    populateTable(updatedResults, true);
+
+                    statusLabel.setText("Status: Ad-hoc script executed successfully.");
+                } catch (Exception ex) {
+                    statusLabel.setText("Status: Failed to execute ad-hoc script.");
+                    ex.printStackTrace();
+                    JOptionPane.showMessageDialog(ModelSimulationGUI.this, "Error executing script:\n" + ex.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+                }
+            }
+        }
     }
 
     public static void main(String[] args) {

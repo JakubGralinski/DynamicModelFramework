@@ -4,7 +4,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class Model1 implements ModelBase{
+public class Model1 implements ModelBase {
     private int LL; // Number of years
 
     @Bind("twKI")
@@ -37,15 +37,12 @@ public class Model1 implements ModelBase{
     @Bind("IMP")
     private double[] IMP;
 
-    private double[] PKB;
+    private double[] PKB; // GDP (calculated values)
 
-    public Model1(int years) {
-        this.LL = years;
-        initializeArrays();
-    }
+    private List<Integer> lata; // Years from the input JSON
 
-    private void initializeArrays() {
-        PKB = new double[LL];
+    public Model1(int lata) {
+        // Constructor for initialization without predefined years
     }
 
     public void setData(Map<String, Object> data) {
@@ -53,13 +50,17 @@ public class Model1 implements ModelBase{
             throw new IllegalArgumentException("Input data is null or empty.");
         }
 
-        System.out.println("Data received in setData: " + data); // Debugging log
+        System.out.println("Data received in setData: " + data);
 
-        List<Double> lata = (List<Double>) data.get("LATA");
-        if (lata == null || lata.isEmpty()) {
+        // Ensure LATA field is present and valid
+        List<Double> lataDoubles = (List<Double>) data.get("LATA");
+        if (lataDoubles == null || lataDoubles.isEmpty()) {
             throw new IllegalArgumentException("The 'LATA' field is missing or empty in the input data.");
         }
-        this.LL = lata.size();
+
+        // Convert LATA to integers
+        this.lata = lataDoubles.stream().map(Double::intValue).collect(Collectors.toList());
+        this.LL = lata.size(); // Update the number of years based on LATA
         initializeArrays();
 
         for (Field field : this.getClass().getDeclaredFields()) {
@@ -68,13 +69,13 @@ public class Model1 implements ModelBase{
                 String key = bind.value();
                 List<Double> values = (List<Double>) data.getOrDefault(key, Collections.emptyList());
 
-                System.out.println("Key: " + key + ", Values: " + values); // Debugging log
+                System.out.println("Key: " + key + ", Values: " + values);
 
                 double[] initialValues = toDoubleArray(values);
                 if (initialValues.length == 0) {
                     System.out.println("Warning: Field '" + key + "' is empty. Using default values.");
                     initialValues = new double[LL];
-                    Arrays.fill(initialValues, 1.0);
+                    Arrays.fill(initialValues, 1.0); // Default value
                 }
 
                 try {
@@ -87,7 +88,11 @@ public class Model1 implements ModelBase{
         }
     }
 
-    protected double[] extrapolate(double[] initialValues, int targetLength) {
+    private void initializeArrays() {
+        PKB = new double[LL];
+    }
+
+    private double[] extrapolate(double[] initialValues, int targetLength) {
         if (initialValues == null || initialValues.length == 0) {
             throw new IllegalArgumentException("Initial values array is null or empty.");
         }
@@ -104,8 +109,10 @@ public class Model1 implements ModelBase{
     }
 
     public void run() {
+        // Initial calculation for the first year
         PKB[0] = KI[0] + KS[0] + INW[0] + EKS[0] - IMP[0];
 
+        // Loop through subsequent years
         for (int t = 1; t < LL; t++) {
             KI[t] = twKI[t % twKI.length] * KI[t - 1];
             KS[t] = twKS[t % twKS.length] * KS[t - 1];
@@ -119,24 +126,12 @@ public class Model1 implements ModelBase{
     public Map<String, Object> getResults() {
         Map<String, Object> results = new HashMap<>();
 
-        // Instead of storing arrays like this:
-        // results.put("LATA", generateYears().toArray(new Integer[0]));
-        // store them as a List<Integer>:
-        List<Integer> years = generateYears();
-        results.put("LATA", years);
+        // Add LATA directly from the input
+        results.put("LATA", lata);
 
-        // Instead of storing PKB, EKS as double[], store them as List<Double>:
+        // Add calculated PKB
         results.put("PKB", Arrays.stream(PKB).boxed().collect(Collectors.toList()));
-        results.put("EKS", Arrays.stream(EKS).boxed().collect(Collectors.toList()));
 
         return results;
-    }
-
-    private List<Integer> generateYears() {
-        List<Integer> years = new ArrayList<>();
-        for (int i = 2015; i < 2015 + LL; i++) {
-            years.add(i);
-        }
-        return years;
     }
 }

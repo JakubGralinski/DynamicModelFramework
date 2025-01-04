@@ -174,4 +174,11 @@ public class Controller {
             e.printStackTrace();
         }
     }
+
+    public Map<String, Object> getResultsFromFile(String resultsFilePath) throws IOException {
+        try (Reader reader = new FileReader(resultsFilePath)) {
+            Gson gson = new Gson();
+            return gson.fromJson(reader, new TypeToken<Map<String, Object>>() {}.getType());
+        }
+    }
 }

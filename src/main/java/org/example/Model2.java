@@ -37,17 +37,17 @@ public class Model2 implements ModelBase {
     @Bind("IMP")
     private double[] IMP;
 
-    private double[] PKB;
-    private double[] NetExports; // New metric for Model2
+    private double[] PKB; // GDP values
+    private double[] NetExports; // Net Exports (calculated values)
+    private List<Integer> lata; // Years from the input JSON
 
-    public Model2(int years) {
-        this.LL = years;
-        initializeArrays();
+    public Model2(int lata) {
+        // Constructor with no predefined years
     }
 
     private void initializeArrays() {
         PKB = new double[LL];
-        NetExports = new double[LL]; // Initialize Net Exports
+        NetExports = new double[LL];
     }
 
     public void setData(Map<String, Object> data) {
@@ -55,13 +55,17 @@ public class Model2 implements ModelBase {
             throw new IllegalArgumentException("Input data is null or empty.");
         }
 
-        System.out.println("Data received in setData: " + data); // Debugging log
+        System.out.println("Data received in setData: " + data);
 
-        List<Double> lata = (List<Double>) data.get("LATA");
-        if (lata == null || lata.isEmpty()) {
+        // Ensure LATA field is present and valid
+        List<Double> lataDoubles = (List<Double>) data.get("LATA");
+        if (lataDoubles == null || lataDoubles.isEmpty()) {
             throw new IllegalArgumentException("The 'LATA' field is missing or empty in the input data.");
         }
-        this.LL = lata.size();
+
+        // Convert LATA to integers
+        this.lata = lataDoubles.stream().map(Double::intValue).collect(Collectors.toList());
+        this.LL = lata.size(); // Update the number of years based on LATA
         initializeArrays();
 
         for (Field field : this.getClass().getDeclaredFields()) {
@@ -70,7 +74,7 @@ public class Model2 implements ModelBase {
                 String key = bind.value();
                 List<Double> values = (List<Double>) data.getOrDefault(key, Collections.emptyList());
 
-                System.out.println("Key: " + key + ", Values: " + values); // Debugging log
+                System.out.println("Key: " + key + ", Values: " + values);
 
                 double[] initialValues = toDoubleArray(values);
                 if (initialValues.length == 0) {
@@ -89,7 +93,7 @@ public class Model2 implements ModelBase {
         }
     }
 
-    protected double[] extrapolate(double[] initialValues, int targetLength) {
+    private double[] extrapolate(double[] initialValues, int targetLength) {
         if (initialValues == null || initialValues.length == 0) {
             throw new IllegalArgumentException("Initial values array is null or empty.");
         }
@@ -106,7 +110,6 @@ public class Model2 implements ModelBase {
     }
 
     public void run() {
-        // Calculate PKB and Net Exports for Model2
         for (int t = 0; t < LL; t++) {
             if (t == 0) {
                 PKB[t] = KI[t] + KS[t] + INW[t] + EKS[t] - IMP[t];
@@ -119,7 +122,7 @@ public class Model2 implements ModelBase {
                 PKB[t] = KI[t] + KS[t] + INW[t] + EKS[t] - IMP[t];
             }
 
-            // New calculation for Model2: Net Exports
+            // Calculate Net Exports
             NetExports[t] = EKS[t] - IMP[t];
         }
     }
@@ -127,22 +130,13 @@ public class Model2 implements ModelBase {
     public Map<String, Object> getResults() {
         Map<String, Object> results = new HashMap<>();
 
-        // Generate year list
-        List<Integer> years = generateYears();
-        results.put("LATA", years);
+        // Use the LATA field from the input
+        results.put("LATA", lata);
 
         // Add PKB and Net Exports
         results.put("PKB", Arrays.stream(PKB).boxed().collect(Collectors.toList()));
         results.put("NET_EXPORTS", Arrays.stream(NetExports).boxed().collect(Collectors.toList()));
 
         return results;
-    }
-
-    private List<Integer> generateYears() {
-        List<Integer> years = new ArrayList<>();
-        for (int i = 2015; i < 2015 + LL; i++) {
-            years.add(i);
-        }
-        return years;
     }
 }
