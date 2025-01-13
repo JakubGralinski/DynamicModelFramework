@@ -92,7 +92,7 @@ java -jar target/DynamicModelFramework.jar
 	•	🖼️ Swing: For GUI development.
 
 📂 Repository Structure
-
+```bash
 DynamicModelFramework/
 ├── src/
 │   ├── main/
@@ -101,7 +101,7 @@ DynamicModelFramework/
 │   │   │   ├── org/example/    # GUI, controller, and annotations
 │   │   ├── resources/          # Jupyter notebooks, sample JSON files, and plots
 ├── README.md                   # Project documentation
-
+```
 🤝 Contribution
 
 Contributions are welcome! 🎉 Feel free to fork this repository and submit a pull request.
