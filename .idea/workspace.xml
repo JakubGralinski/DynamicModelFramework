@@ -4,19 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="27979a25-1280-4824-bf88-fa13893c1b4f" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/intermediate.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/models/Model3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Model3.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/intermediate.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/intermediate.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/large_indices_plot.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/output.ipynb" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/results.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/results.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/results.tsv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/small_indices_plot.png" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/zdeks_plot.png" beforeDir="false" />
-    </list>
+    <list default="true" id="27979a25-1280-4824-bf88-fa13893c1b4f" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -75,7 +63,7 @@
       <recent name="org.example" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.ModelFrameworkGUI">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="UTP_PRO_03" />
@@ -145,6 +133,11 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Application.ModelFrameworkGUI" />
+      </list>
+    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
@@ -170,7 +163,7 @@
       <workItem from="1736267776129" duration="469000" />
       <workItem from="1736270130074" duration="4521000" />
       <workItem from="1736511493097" duration="3402000" />
-      <workItem from="1736684152102" duration="643000" />
+      <workItem from="1736684152102" duration="6236000" />
     </task>
     <servers />
   </component>
