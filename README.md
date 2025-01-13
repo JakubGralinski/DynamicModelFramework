@@ -1,100 +1,89 @@
-🌟 DynamicModelFramework 🌟
+# 🌟 DynamicModelFramework 🌟
 
-DynamicModelFramework is a Java-based application designed to model and simulate economic indices dynamically using JSON input data. The project provides a flexible and interactive GUI, allowing users to run, analyze, and visualize results across various predefined and custom models.
+DynamicModelFramework is a **Java-based application** designed to model and simulate **economic indices** dynamically using JSON input data. The project provides a **flexible and interactive GUI**, allowing users to run, analyze, and visualize results across various predefined and custom models.
 
-🚀 Key Features
+---
 
-🎛️ Model Framework GUI
-	•	🌟 Interactive GUI: Provides an intuitive interface for loading data, running models, and visualizing results.
-	•	🔄 Dynamic Model Selection: Choose between Model1, Model2, and Model3 to suit your simulation needs.
+## 🚀 Key Features
 
-📊 Dynamic Modeling
-	•	🟢 Model1: Basic GDP calculation model.
-	•	🔵 Model2: Adds net exports as a key metric.
-	•	🔴 Model3: Introduces randomness with a shock factor for advanced simulations.
+### 🎛️ **Model Framework GUI**
+- **🌟 Interactive GUI**: Provides an intuitive interface for loading data, running models, and visualizing results.
+- **🔄 Dynamic Model Selection**: Choose between `Model1`, `Model2`, and `Model3` to suit your simulation needs.
 
-🛠️ Annotation-Driven Data Binding
-	•	🔗 @Bind Annotation: Connects JSON keys to model variables seamlessly.
-	•	🔍 Reflection Mechanism: Dynamically sets fields in the model based on input data.
+### 📊 **Dynamic Modeling**
+- **🟢 Model1**: Basic GDP calculation model.
+- **🔵 Model2**: Adds **net exports** as a key metric.
+- **🔴 Model3**: Introduces **randomness** with a **shock factor** for advanced simulations.
 
-📈 Advanced Data Visualization
-	•	Generate beautiful plots for key indices, including:
-	•	📊 Large-number indices (e.g., GDP, net exports).
-	•	📉 Small-number indices (e.g., transformation weights).
-	•	📊 Export-to-GDP ratio (ZDEKS).
+### 🛠️ **Annotation-Driven Data Binding**
+- **🔗 @Bind Annotation**: Connects JSON keys to model variables seamlessly.
+- **🔍 Reflection Mechanism**: Dynamically sets fields in the model based on input data.
 
-🐍 Python Integration
-	•	Leverages Python’s Jupyter notebooks (nbconvert) for additional data processing and visualization.
+### 📈 **Advanced Data Visualization**
+- Generate **beautiful plots** for key indices, including:
+  - 📊 Large-number indices (e.g., GDP, net exports).
+  - 📉 Small-number indices (e.g., transformation weights).
+  - 📊 Export-to-GDP ratio (`ZDEKS`).
 
-📂 Output Handling
-	•	💾 Save results in JSON and TSV formats.
-	•	📁 Export plots for detailed analysis.
+### 🐍 **Python Integration**
+- Leverages Python's **Jupyter notebooks** (`nbconvert`) for additional data processing and visualization.
 
-🛠️ How It Works
+### 📂 **Output Handling**
+- **💾 Save results** in JSON and TSV formats.
+- **📁 Export plots** for detailed analysis.
 
-🔄 Data Flow
-	1.	📥 Load JSON Data: Import data into the system via the GUI.
-	2.	🔗 Set Data: Use the setData method to bind input JSON fields to model variables using annotations.
-	3.	▶️ Run Model: Execute calculations via the selected model.
-	4.	📤 Generate Results: Save results in JSON and TSV formats.
-	5.	📊 Visualize: View detailed plots generated dynamically.
+---
 
-🧩 Core Components
-	•	🔗 Annotations (@Bind): Bridges JSON keys and Java model variables.
-	•	🔍 Reflection: Dynamically maps input data to annotated fields.
-	•	🔄 Extrapolation: Ensures all arrays have consistent lengths, filling missing values with the last known value.
+## 🛠️ How It Works
 
-🖥️ Code Highlights
+### 🔄 **Data Flow**
+1. **📥 Load JSON Data**: Import data into the system via the GUI.
+2. **🔗 Set Data**: Use the `setData` method to bind input JSON fields to model variables using annotations.
+3. **▶️ Run Model**: Execute calculations via the selected model.
+4. **📤 Generate Results**: Save results in JSON and TSV formats.
+5. **📊 Visualize**: View detailed plots generated dynamically.
 
-📝 Annotation Example
+### 🧩 **Core Components**
+- **🔗 Annotations (`@Bind`)**: Bridges JSON keys and Java model variables.
+- **🔍 Reflection**: Dynamically maps input data to annotated fields.
+- **🔄 Extrapolation**: Ensures all arrays have consistent lengths, filling missing values with the last known value.
 
-The @Bind annotation is used to dynamically map JSON fields to Java model variables:
+---
 
-@Bind("twKI")
-private double[] twKI;
+## 📖 How to Use
 
-🔍 Reflection in setData
+1️⃣ Clone the repository:  
+   ```bash
+   git clone https://github.com/YourUsername/DynamicModelFramework.git
 
-Automatically maps data from JSON to model fields using reflection:
+2️⃣ Navigate to the project directory:
 
-for (Field field : this.getClass().getDeclaredFields()) {
-    if (field.isAnnotationPresent(Bind.class)) {
-        Bind bind = field.getAnnotation(Bind.class);
-        String key = bind.value();
-        List<Double> values = (List<Double>) data.getOrDefault(key, Collections.emptyList());
-        field.setAccessible(true);
-        field.set(this, extrapolate(toDoubleArray(values), LL));
-    }
-}
+cd DynamicModelFramework
 
-🔄 Extrapolation
+3️⃣ Build the project:
 
-Handles cases where input data has fewer years than expected:
+If using Maven, run:
 
-private double[] extrapolate(double[] initialValues, int targetLength) {
-    double[] result = new double[targetLength];
-    for (int i = 0; i < targetLength; i++) {
-        result[i] = (i < initialValues.length) ? initialValues[i] : initialValues[initialValues.length - 1];
-    }
-    return result;
-}
+mvn clean install
 
-📖 How to Use
-	1.	Clone the repository:
+4️⃣ Run the GUI application:
 
-git clone https://github.com/YourUsername/DynamicModelFramework.git
+java -jar target/DynamicModelFramework.jar
 
+5️⃣ Load your JSON data:
+	•	Open the GUI.
+	•	Click Load Data and select your JSON file.
 
-	2.	Build the project using Maven or your preferred Java build tool.
-	3.	Run the GUI:
+6️⃣ Select a model:
+	•	Use the dropdown to choose between Model1, Model2, or Model3.
 
-java -jar DynamicModelFramework.jar
+7️⃣ Run the model:
+	•	Click Run Model to execute the simulation.
 
-
-	4.	Load a JSON file through the GUI. 📂
-	5.	Select a model and run the simulation. 🎛️
-	6.	View the results in the table or download them as TSV. 📥
-	7.	Visualize the indices using the generated plots. 📊
+8️⃣ View results:
+	•	View calculated indices in the table.
+	•	Save them in TSV or JSON format.
+	•	Visualize results in the Plots Section.
 
 🧰 Dependencies
 	•	☕ Java: Version 11 or higher.
@@ -126,3 +115,4 @@ Contributions are welcome! 🎉 Feel free to fork this repository and submit a p
 This project is licensed under the MIT License. See LICENSE for details. 📄
 
 🎉 Happy Coding! 💻 🚀
+
