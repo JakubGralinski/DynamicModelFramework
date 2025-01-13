@@ -55,7 +55,7 @@ DynamicModelFramework is a **Java-based application** designed to model and simu
 1️⃣ Clone the repository:  
    ```bash
    git clone https://github.com/YourUsername/DynamicModelFramework.git
-
+```
 2️⃣ Navigate to the project directory:
 
 cd DynamicModelFramework
@@ -67,9 +67,9 @@ If using Maven, run:
 mvn clean install
 
 4️⃣ Run the GUI application:
-
+``` bash
 java -jar target/DynamicModelFramework.jar
-
+```
 5️⃣ Load your JSON data:
 	•	Open the GUI.
 	•	Click Load Data and select your JSON file.
