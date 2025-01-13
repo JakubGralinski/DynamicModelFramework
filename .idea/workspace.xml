@@ -5,18 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="27979a25-1280-4824-bf88-fa13893c1b4f" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/models/Model3.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Controller.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Controller.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/ModelFrameworkGUI.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/ModelFrameworkGUI.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/intermediate.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/models/Model3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/models/Model3.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/intermediate.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/intermediate.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/large_indices_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/large_indices_plot.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/output.ipynb" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/output.ipynb" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/large_indices_plot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/output.ipynb" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/resources/results.json" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/results.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/results.tsv" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/results.tsv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/zdeks_plot.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/zdeks_plot.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/testLargeDataset.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/resources/testMissingFields.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/results.tsv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/small_indices_plot.png" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/zdeks_plot.png" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -28,8 +27,8 @@
       <list>
         <option value="AnnotationType" />
         <option value="Interface" />
-        <option value="Jupyter Notebook" />
         <option value="Class" />
+        <option value="Jupyter Notebook" />
       </list>
     </option>
   </component>
@@ -45,38 +44,38 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Application.AppGUI.executor": "Run",
-    "Application.ControllerTest.executor": "Run",
-    "Application.Main.executor": "Run",
-    "Application.Model1Test.executor": "Run",
-    "Application.ModelFrameworkGUI.executor": "Run",
-    "Application.ModelSimulationGUI.executor": "Run",
-    "JUnit.ControllerTest.executor": "Run",
-    "JUnit.Model1Test.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "main",
-    "kotlin-language-version-configured": "true",
-    "last_directory_selection": "/Users/jakubgralinski/Desktop/studies/UTP/UTP_PRO_03/src/test/java",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.AppGUI.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Main.executor&quot;: &quot;Run&quot;,
+    &quot;Application.Model1Test.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ModelFrameworkGUI.executor&quot;: &quot;Run&quot;,
+    &quot;Application.ModelSimulationGUI.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.ControllerTest.executor&quot;: &quot;Run&quot;,
+    &quot;JUnit.Model1Test.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_directory_selection&quot;: &quot;/Users/jakubgralinski/Desktop/studies/UTP/UTP_PRO_03/src/test/java&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
       <recent name="org.example" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.ModelFrameworkGUI">
+  <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="org.example.Main" />
       <module name="UTP_PRO_03" />
@@ -146,17 +145,12 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.ModelFrameworkGUI" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9f38398b9061-18abd8497189-intellij.indexing.shared.core-IU-241.14494.240" />
-        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-IU-241.14494.240" />
+        <option value="bundled-js-predefined-1d06a55b98c1-74d2a5396914-JavaScript-PY-241.14494.241" />
+        <option value="bundled-python-sdk-0509580d9d50-28c9f5db9ffe-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-241.14494.241" />
       </set>
     </attachedChunks>
   </component>
@@ -172,6 +166,11 @@
       <workItem from="1735392336835" duration="5429000" />
       <workItem from="1735584347700" duration="1670000" />
       <workItem from="1735948388810" duration="5706000" />
+      <workItem from="1736108920703" duration="771000" />
+      <workItem from="1736267776129" duration="469000" />
+      <workItem from="1736270130074" duration="4521000" />
+      <workItem from="1736511493097" duration="3402000" />
+      <workItem from="1736684152102" duration="643000" />
     </task>
     <servers />
   </component>

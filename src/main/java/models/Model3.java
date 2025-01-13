@@ -105,7 +105,7 @@ public class Model3 implements ModelBase {
     public void run() {
         Random random = new Random();
         for (int t = 0; t < LL; t++) {
-            shockFactor[t] = 1 + (random.nextDouble() * 0.1 - 0.05); // Random shock: +/- 5%
+            shockFactor[t] = 1 + (random.nextDouble() * 0.1 - 0.05); // Random shock +/- 5%
 
             if (t == 0) {
                 PKB[t] = (KI[t] + KS[t] + INW[t] + EKS[t]) * shockFactor[t] - IMP[t];
